@@ -62,25 +62,25 @@ describe("shouldUseChineseCalendar", () => {
 });
 
 describe("locale preference", () => {
-  const originalWindow = global.window;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const originalApp = (global.window as any)?.app;
 
   afterEach(() => {
-    global.window = originalWindow;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (global.window as any).app = originalApp;
   });
 
   test("prefers calendar locale override over Obsidian locale", () => {
-    global.window = ({
-      app: {
-        plugins: {
-          getPlugin: () => ({
-            options: { localeOverride: "en" },
-          }),
-        },
-        vault: {
-          getConfig: () => "zh-CN",
-        },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (global.window as any).app = {
+      plugins: {
+        getPlugin: (id: string) =>
+          id === "calendar" ? { options: { localeOverride: "en" } } : null,
       },
-    } as unknown) as Window & typeof globalThis;
+      vault: {
+        getConfig: () => "zh-CN",
+      },
+    };
 
     expect(getCalendarLocaleOverride()).toBe("en");
     expect(getPreferredLocale()).toBe("en");
