@@ -69,7 +69,7 @@ describe("locale preference", () => {
   });
 
   test("prefers calendar locale override over Obsidian locale", () => {
-    global.window = {
+    global.window = ({
       app: {
         plugins: {
           getPlugin: () => ({
@@ -80,7 +80,7 @@ describe("locale preference", () => {
           getConfig: () => "zh-CN",
         },
       },
-    } as Window & typeof globalThis;
+    } as unknown) as Window & typeof globalThis;
 
     expect(getCalendarLocaleOverride()).toBe("en");
     expect(getPreferredLocale()).toBe("en");
