@@ -1,4 +1,5 @@
 import { App, Modal } from "obsidian";
+import { t } from "src/i18n";
 
 interface IConfirmationDialogParams {
   cta: string;
@@ -19,7 +20,7 @@ export class ConfirmationModal extends Modal {
 
     this.contentEl.createDiv("modal-button-container", (buttonsEl) => {
       buttonsEl
-        .createEl("button", { text: "Never mind" })
+        .createEl("button", { text: t("modal.cancel") })
         .addEventListener("click", () => this.close());
 
       buttonsEl

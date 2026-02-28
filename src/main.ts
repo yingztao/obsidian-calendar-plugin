@@ -2,6 +2,7 @@ import type { Moment, WeekSpec } from "moment";
 import { App, Plugin, WorkspaceLeaf } from "obsidian";
 
 import { VIEW_TYPE_CALENDAR } from "./constants";
+import { t } from "./i18n";
 import { settings } from "./ui/stores";
 import {
   appHasPeriodicNotesPluginLoaded,
@@ -42,7 +43,7 @@ export default class CalendarPlugin extends Plugin {
 
     this.addCommand({
       id: "show-calendar-view",
-      name: "Open view",
+      name: t("command.openView"),
       checkCallback: (checking: boolean) => {
         if (checking) {
           return (
@@ -55,7 +56,7 @@ export default class CalendarPlugin extends Plugin {
 
     this.addCommand({
       id: "open-weekly-note",
-      name: "Open Weekly Note",
+      name: t("command.openWeeklyNote"),
       checkCallback: (checking) => {
         if (checking) {
           return !appHasPeriodicNotesPluginLoaded();
@@ -66,7 +67,7 @@ export default class CalendarPlugin extends Plugin {
 
     this.addCommand({
       id: "reveal-active-note",
-      name: "Reveal active note",
+      name: t("command.revealActiveNote"),
       callback: () => this.view.revealActiveNote(),
     });
 

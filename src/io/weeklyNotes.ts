@@ -5,6 +5,7 @@ import {
   getWeeklyNoteSettings,
 } from "obsidian-daily-notes-interface";
 
+import { t } from "src/i18n";
 import type { ISettings } from "src/settings";
 import { createConfirmationDialog } from "src/ui/modal";
 
@@ -33,10 +34,10 @@ export async function tryToCreateWeeklyNote(
 
   if (settings.shouldConfirmBeforeCreate) {
     createConfirmationDialog({
-      cta: "Create",
+      cta: t("modal.create"),
       onAccept: createFile,
-      text: `File ${filename} does not exist. Would you like to create it?`,
-      title: "New Weekly Note",
+      text: t("modal.createMissingFileText", { filename }),
+      title: t("modal.newWeeklyNoteTitle"),
     });
   } else {
     await createFile();
