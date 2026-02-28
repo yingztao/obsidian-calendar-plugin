@@ -1,4 +1,9 @@
-import { messages, normalizeLocale, t } from "src/i18n";
+import {
+  messages,
+  normalizeLocale,
+  shouldUseChineseCalendar,
+  t,
+} from "src/i18n";
 
 describe("normalizeLocale", () => {
   test.each([
@@ -40,5 +45,16 @@ describe("t", () => {
     expect(
       t("modal.createMissingFileText", { filename: "2026-02-28" }, "zh-CN")
     ).toBe("文件 2026-02-28 不存在。是否要创建该文件？");
+  });
+});
+
+describe("shouldUseChineseCalendar", () => {
+  test.each([
+    ["zh-CN", true],
+    ["zh-Hans", true],
+    ["en-US", false],
+    [undefined, false],
+  ])("returns %p for %p", (input, expected) => {
+    expect(shouldUseChineseCalendar(input)).toBe(expected);
   });
 });

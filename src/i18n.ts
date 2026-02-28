@@ -198,3 +198,9 @@ export function t(
 export function isChineseUI(rawLocale: string = getObsidianLocale()): boolean {
   return normalizeLocale(rawLocale) === "zh-CN";
 }
+
+export function shouldUseChineseCalendar(
+  rawLocale: string = getObsidianLocale()
+): boolean {
+  return normalizeLocale(rawLocale) === "zh-CN";
+}
