@@ -229,9 +229,10 @@ export class CalendarSettingsTab extends PluginSettingTab {
         });
         dropdown.setValue(this.plugin.options.localeOverride);
         dropdown.onChange(async (value) => {
-          this.plugin.writeOptions(() => ({
+          await this.plugin.writeOptions(() => ({
             localeOverride: value as ILocaleOverride,
           }));
+          this.display();
         });
       });
   }

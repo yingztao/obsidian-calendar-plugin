@@ -170,6 +170,30 @@ export function getObsidianLocale(): string {
   return "en";
 }
 
+export function getCalendarLocaleOverride(): string | null {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const app = (window as any)?.app;
+    const calendarPlugin = app?.plugins?.getPlugin?.("calendar");
+    const localeOverride = calendarPlugin?.options?.localeOverride;
+    if (
+      typeof localeOverride === "string" &&
+      localeOverride.trim() !== "" &&
+      localeOverride !== "system-default"
+    ) {
+      return localeOverride;
+    }
+  } catch (_error) {
+    // Ignore and fallback to Obsidian locale.
+  }
+
+  return null;
+}
+
+export function getPreferredLocale(): string {
+  return getCalendarLocaleOverride() || getObsidianLocale();
+}
+
 function interpolate(
   template: string,
   vars?: TranslationVars
@@ -187,7 +211,7 @@ function interpolate(
 export function t(
   key: TranslationKey,
   vars?: TranslationVars,
-  rawLocale: string = getObsidianLocale()
+  rawLocale: string = getPreferredLocale()
 ): string {
   const locale = normalizeLocale(rawLocale);
   const english = messages.en[key];
@@ -195,12 +219,12 @@ export function t(
   return interpolate(translated, vars);
 }
 
-export function isChineseUI(rawLocale: string = getObsidianLocale()): boolean {
+export function isChineseUI(rawLocale: string = getPreferredLocale()): boolean {
   return normalizeLocale(rawLocale) === "zh-CN";
 }
 
 export function shouldUseChineseCalendar(
-  rawLocale: string = getObsidianLocale()
+  rawLocale: string = getPreferredLocale()
 ): boolean {
   return normalizeLocale(rawLocale) === "zh-CN";
 }

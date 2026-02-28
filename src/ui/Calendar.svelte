@@ -15,6 +15,7 @@
 
   let today: Moment;
   let calendarRootEl: HTMLDivElement;
+  let useChineseCalendar = false;
 
   $: today = getToday($settings);
 
@@ -32,9 +33,21 @@
     localizeTodayButton();
   }
 
+  function shouldUseChineseCalendarForSettings(settings: ISettings): boolean {
+    if (
+      settings.localeOverride &&
+      settings.localeOverride !== "system-default"
+    ) {
+      return shouldUseChineseCalendar(settings.localeOverride);
+    }
+
+    return shouldUseChineseCalendar();
+  }
+
   function getToday(settings: ISettings) {
     configureGlobalMomentLocale(settings.localeOverride, settings.weekStart);
-    if (shouldUseChineseCalendar()) {
+    useChineseCalendar = shouldUseChineseCalendarForSettings(settings);
+    if (useChineseCalendar) {
       window.moment.locale("zh-cn");
     }
     dailyNotes.reindex();
@@ -43,25 +56,26 @@
   }
 
   function localizeTodayButton() {
-    if (!calendarRootEl || !shouldUseChineseCalendar()) {
+    if (!calendarRootEl) {
       return;
     }
 
+    const targetLabel = useChineseCalendar ? "今天" : "Today";
     const actionEls = calendarRootEl.querySelectorAll("button, [role='button']");
     actionEls.forEach((el) => {
       const text = el.textContent?.trim()?.toLowerCase();
-      if (text === "today") {
-        el.textContent = "今天";
+      if (text === "today" || text === "今天") {
+        el.textContent = targetLabel;
       }
 
       const ariaLabel = el.getAttribute("aria-label")?.trim()?.toLowerCase();
-      if (ariaLabel === "today") {
-        el.setAttribute("aria-label", "今天");
+      if (ariaLabel === "today" || ariaLabel === "今天") {
+        el.setAttribute("aria-label", targetLabel);
       }
 
       const title = el.getAttribute("title")?.trim()?.toLowerCase();
-      if (title === "today") {
-        el.setAttribute("title", "今天");
+      if (title === "today" || title === "今天") {
+        el.setAttribute("title", targetLabel);
       }
     });
   }
